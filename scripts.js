@@ -192,26 +192,25 @@ const handleDataSearchFormSubmit = (event) => {
     const result = []
 }
 
-
-    for (const book of booksList) {         //corrected 
-        const titleMatch = filters.title.trim() === '' && book.title.toLowerCase().includes(filters.title.toLowerCase());
-        const authorMatch = filters.author === 'any' || book.author === filters.author;
-        const genreMatch = filters.genre = 'any' ;
-            for (const genre of book.genres) { 
-                if (singleGenre === filters.genre) { 
-                    genreMatch = true ;
+//Find book matches to the 3 filters
+    for (const book of books) {         //corrected 
+        const titleMatch = filters.title.trim() === '' || book.title.toLowerCase().includes(filters.title.toLowerCase())
+        const authorMatch = filters.author === 'any' || book.author === filters.author
+        let genreMatch = filters.genre = 'any' ;
+            
+        if(!genreMatch)
+        {
+            for (const singleGenre of book.genres) 
+            { 
+                if (singleGenre === filters.genre) genreMatch = true
+            }
         }
+        if ( titleMatch && authorMatch && genreMatch ) result.push(book)
     }
 
-        if (titleMatch && authorMatch && genreMatch) {
-            result.push(book);
-    }
-
-    if (result.length < 1 ) { 
-    dataListMessage.classList.add('list__message_show');
-     } else {
-        dataListMessage.classList.remove('list__message_show');
-     }
+    matches = result
+    matches.length < 1 ? dataListMessage.classList.add('list__message_show') : dataListMessage.classList.remove('list__message_show') 
+    
     
 
     dataListItems.innerHTML = '';
