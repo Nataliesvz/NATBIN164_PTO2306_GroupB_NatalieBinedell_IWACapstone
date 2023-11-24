@@ -105,6 +105,23 @@ range = [page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE]
 dataListItems.appendChild(createPreviewsFragment(matches, range))
 page = page + 1
 
+//Update the text for the "More" button at the bottom of the book preview list
+//to display the number of remaining matches.
+//The button is also set to disabled if 0 matches remain.
+//Global variables "matches" and "page", together with the constant "BOOKS_PER_PAGE", are used to do the calculation.
+const updateRemaining = () =>
+{
+    const initial = matches.length - (page * BOOKS_PER_PAGE)
+    const hasRemaining = initial > 0
+    const remaining = hasRemaining ? initial : 0
+    dataListButton.disabled = !hasRemaining
+
+    dataListButton.innerHTML = /* html */ `
+        <span>Show more</span>
+        <span class="list__remaining"> (${remaining})</span>
+    `
+}
+
 
 const genresFragment = document.createDocumentFragment()
 const genresElement = document.createElement('option')
