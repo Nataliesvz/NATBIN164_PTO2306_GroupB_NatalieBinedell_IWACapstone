@@ -99,14 +99,19 @@ for ({ author, image, title, id }; of extracted) {            //i++ removed
     return previewPageFragment
 } 
 
+//Display the first page for the initial, unfiltered list.
+dataListItems.innerHTML = ''
+range = [page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE]
+dataListItems.appendChild(createPreviewsFragment(matches, range))
+page = page + 1
 
 
-const genres = document.createDocumentFragment();
-const element = document.createElement('option');
-element.value = 'any';
-element.innerText= 'All Genres';
+const genresFragment = document.createDocumentFragment()
+const genresElement = document.createElement('option')
+genresElement.value = 'any'
+genresElement.text= 'All Genres'
 
-genres.appendChild(element);
+genresFragment.appendChild(genresElement)
 
 for ([id, name]; Object.entries(genres))  {
     const element= document.createElement('option');    //create variable 
