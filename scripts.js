@@ -87,12 +87,13 @@ const previewPageFragment = document.createDocumentFragment()     //declare vari
 extracted = matches.slice(range[0], range[1])
 
 for ( const { author, image, title, id } of extracted) {
-    const preview = createPreview({
-        author,
-        id,
-        image,
-        title
-    })
+        const preview = createPreview({
+            author,
+            id,
+            image,
+            title
+        })
+
 
     previewPageFragment.appendChild(preview)
 }
@@ -127,7 +128,7 @@ updateRemaining()
 
 
 const genresFragment = document.createDocumentFragment()
-const genresElement = document.createElement('option')
+let genresElement = document.createElement('option')
 genresElement.value = 'any'
 genresElement.text= 'All Genres'
 
@@ -190,13 +191,15 @@ const handleDataSearchFormSubmit = (event) => {
     const formData = new FormData(event.target)
     const filters = Object.fromEntries(formData)
     const result = []
-}
+
 
 //Find book matches to the 3 filters
-    for (const book of books) {         //corrected 
-        const titleMatch = filters.title.trim() === '' || book.title.toLowerCase().includes(filters.title.toLowerCase())
-        const authorMatch = filters.author === 'any' || book.author === filters.author
-        let genreMatch = filters.genre = 'any' ;
+for (const book of books) {
+    const titleMatch = filters.title.trim() === '' || book.title.toLowerCase().includes(filters.title.toLowerCase())
+    const authorMatch = filters.author === 'any' || book.author === filters.author
+    let genreMatch = filters.genre === 'any'
+    if (!genreMatch)
+
             
         if(!genreMatch)
         {
@@ -222,7 +225,7 @@ const handleDataSearchFormSubmit = (event) => {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
     dataSearchOverlay.close()
-
+}
 
 dataSearchForm.addEventListener('submit', handleDataSearchFormSubmit)
 
