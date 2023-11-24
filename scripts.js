@@ -122,6 +122,9 @@ const updateRemaining = () =>
     `
 }
 
+//Set the initial state of the button.
+updateRemaining()
+
 
 const genresFragment = document.createDocumentFragment()
 const genresElement = document.createElement('option')
@@ -130,44 +133,37 @@ genresElement.text= 'All Genres'
 
 genresFragment.appendChild(genresElement)
 
-for ([id, name]; Object.entries(genres))  {
-    const element= document.createElement('option');    //create variable 
-    element.value = value;
-    element.innerText = text;
-    genres.appendChild(element);
+for (const [key, value] of Object.entries(genres)) {
+    genresElement = document.createElement('option')
+    genresElement.value = key
+    genresElement.text = value
+    genresFragment.appendChild(genresElement)
 }
+dataSearchGenres.appendChild(genresFragment)
+                                                 //correct syntax -CamelCase
 
-dataSearchGenres.appendChild(genres).       //correct syntax -CAMALCASE   
 
-const authors = document.createDocumentFragment();
+//Create the fragment to display the list of Authors in the dropdown
+//in the search overlay.
+const authorsFragment = document.createDocumentFragment()
+let authorsElement = document.createElement('option')
+authorsElement.value = 'any'
+authorsElement.innerText = 'All Authors'
+authorsFragment.appendChild(authorsElement)
 
-const element = document.createElement('option');
-element.value = 'any';
-element.innerText = 'All Authors';
 
-authors.appendChild(element);
-
-for ([id, name] of Object.entries(authors)) {
-   const element = document.createElement('option');
-    element.value = value;
-    element = text;
-
-    authors.appendChild(element);
+for (const [key, value] of Object.entries(authors)) {
+    authorsElement = document.createElement('option')
+    authorsElement.value = key
+    authorsElement.innerText = value
+    authorsFragment.appendChild(authorsElement)
 }
+dataSearchAuthors.appendChild(authorsFragment)
 
-dataSearchAuthors.appendChild(authors);
 
-dataSettingsTheme.value =
- window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-  ? 'night'
-   : 'day';
 
-const v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-? 'night' 
-: 'day';
 
-documentElement.style.setProperty('--color-dark', css[v].dark);
-documentElement.style.setProperty('--color-light', css[v].light);
+
 
 dataListButton.innerHTML = `Show more (${books.length - BOOKS_PER_PAGE})` ;
 
