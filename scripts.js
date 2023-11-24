@@ -160,6 +160,11 @@ for (const [key, value] of Object.entries(authors)) {
 }
 dataSearchAuthors.appendChild(authorsFragment)
 
+//Added Event Listeners:
+
+dataSearchCancel.addEventListener('click', () => { dataSearchOverlay.close() } )
+dataSettingsCancel.addEventListener('click',  () => { dataSettingsOverlay.close() })
+dataListClose.addEventListener('click', () => { dataListActive.close() })
 
 
 
