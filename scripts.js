@@ -211,81 +211,74 @@ const handleDataSearchFormSubmit = (event) => {
     matches = result
     matches.length < 1 ? dataListMessage.classList.add('list__message_show') : dataListMessage.classList.remove('list__message_show') 
     
-    
+    //Show message if no matches found.
 
-    dataListItems.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    const extracted = source.slice(range[0], range[1]);
-
-    for (cohst {author, image, title, id }; of extracted) {
-        const { author: authorId, id, image, title } = props;
-        const element = document.createElement('button');
-        element.classList = 'preview';
-        element.setAttribute('data-preview', id);
-
-        element.innerHTML = /* html */ `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[authorId]}</div>
-            </div>
-        `;
-
-        fragment.appendChild(element);
-    }
-    
-    dataListItems.appendChild(fragment);
-    const initial = matches.length - [page * BOOKS_PER_PAGE];
-    const remaining = hasRemaining ? initial : 0;
-    dataListButton.disabled = initial > 0;
-
-    data-list-button.innerHTML = /* html */ `
-        <span>Show more</span>
-        <span class="list__remaining"> (${remaining})</span>
-    `;
+    //Display the first page of the matches.
+    dataListItems.innerHTML = ''
+    range = [0, BOOKS_PER_PAGE]
+    dataListItems.appendChild(createPreviewsFragment(matches, range))
+    page = 1
+    updateRemaining()
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    dataSearchOverlay.open = false;
-};
+    dataSearchOverlay.close()
 
-dataSettingsOverlay.submit = () => {            //function 
-    event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const result = Object.fromEntries(formData);
-    document.documentElement.style.setProperty('--color-dark', css[result.theme].dark);
-    document.documentElement.style.setProperty('--color-light', css[result.theme].light);
-    data-settings-overlay).open = false;                // not sure about the brachet **
-};
+dataSearchForm.addEventListener('submit', handleDataSearchFormSubmit)
 
-dataListItems.onclick= (event) => {
-    const pathArray = Array.from(event.path || event.composedPath());
-    let active;
+const handleSettingsFormSubmit = (event) => {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const result = Object.fromEntries(formData)
 
-    for (const node of pathArray) {
-        if(active){
-            break;
-        }
-
-        const previewId = node?.dataset?.preview;
-    
-        for (const singleBook of books) {
-            if (singleBook.id === id) {
-                active = singleBook;
-        } 
+    //Set the page to the selected theme
+    if (result.theme === 'night'){
+        document.documentElement.style.setProperty('--color-dark', night.dark)
+        document.documentElement.style.setProperty('--color-light', night.light)  
     }
-    
-    if !active {
-        return;
-    }
-    dataListActive = true;
-    dataListBlur + dataListImage = active.image;
-    dataListTitle = active.title;
-    dataListSubtitle = `${authors[active.author]} (${Date(active.published).year})` ;
-   dataListDescritpion = active.description;
-    }
+    else{
+        document.documentElement.style.setProperty('--color-dark', day.dark)  
+        document.documentElement.style.setProperty('--color-light', day.light)
+    } 
+
+    dataSettingsOverlay.close()
 }
+dataSettingsForm.addEventListener('submit', handleSettingsFormSubmit )
+
+const handleDataListItemsClick = (event) => {
+    const pathArray = Array.from(event.path || event.composedPath())
+    let active = event.target
+    let previewId = null
+
+    //Find the Preview ID for the clicked book.
+    //It is not necessarily set on the event target itself, but could be on its parent (button) element, 
+    //so we need to iterate through pathArray to find the element with the "data-preview" attribute set.
+    for (const node of pathArray) {
+        const { preview } = node.dataset
+        if (preview) {
+            previewId = node.dataset.preview
+            break
+        }
+    }
+    
+    if (!previewId) return
+
+    //Use the previewId to find the details of the clicked book in the master books list.
+    for (const singleBook of books) {
+        if (singleBook.id === previewId) {
+            active = singleBook
+            break
+        }
+    } 
+
+    //Display the details of the clicked book in a modal overlay.
+    dataListActive.showModal()
+    dataListBlur.src = active.image
+    dataListImage.src = active.image
+    dataListTitle.innerHTML = active.title
+    
+    dataListSubTitle.innerHTML = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
+    dataListDescription.innerHTML = active.description
+}
+
+dataListItems.addEventListener('click', handleDataListItemsClick)
