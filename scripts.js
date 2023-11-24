@@ -1,27 +1,62 @@
-import { authors, genres, books  } from './data' ;
+import { BOOKS_PER_PAGE, authors, genres, books } from './data.js'
 
-matches = books
-page = 1;
+let matches = books
+let extracted = books
+let page = 0
+let range = [0,0]
+
+const dataListButton = document.querySelector('[data-list-button]')
+const dataSearchCancel = document.querySelector('[data-search-cancel]')
+const dataSearchOverlay = document.querySelector('[data-search-overlay]')
+const dataHeaderSettings = document.querySelector('[data-header-settings]')
+const dataSettingsCancel = document.querySelector('[data-settings-cancel]')
+const dataSettingsForm = document.querySelector('[data-settings-form]')
+const dataListClose = document.querySelector('[data-list-close]')
+const dataHeaderSearch = document.querySelector('[data-header-search]')
+const dataSearchTitle = document.querySelector('[data-search-title]')
+const dataSearchForm = document.querySelector('[data-search-form]')
+const dataListMessage = document.querySelector('[data-list-message]')
+const dataListItems = document.querySelector('[data-list-items]')
+const dataSearchGenres = document.querySelector('[data-search-genres]')
+const dataSearchAuthors = document.querySelector('[data-search-authors]')
+const dataSettingsTheme = document.querySelector('[data-settings-theme]')
+const dataSettingsOverlay = document.querySelector('[data-settings-overlay]')
+const dataListActive = document.querySelector('[data-list-active]')
+const dataListBlur = document.querySelector('[data-list-blur]')
+const dataListImage = document.querySelector('[data-list-image]')
+const dataListTitle = document.querySelector('[data-list-title]')
+const dataListSubTitle = document.querySelector('[data-list-subtitle]')
+const dataListDescription = document.querySelector('[data-list-description]')
 
 if (!books && !Array.isArray(books)) {
     throw new Error('Source required') ;
 }
-if (!range && range.length < 2) {
+if (!range && range.length != 2) {
     throw new Error('Range must be an array with two numbers');
-}       //fixed syntax issues and structure
+}                                           //fixed syntax issues and structure
 
 
 
 
-const day = {                   //declare variable
-    dark: '10, 10, 20',
+const day = {                                //declare variable
+    dark: '10, 10, 20',     
     light: '255, 255, 255',
 } ;
 
-const night = {             //declare variable
+const night = {                                //declare variable
     dark: '255, 255, 255',
     light: '10, 10, 20',
 };
+
+const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
+dataSettingsTheme.value = theme
+
+//Set the page to the dark theme if matchMedia query results in 'night' 
+//(not necessary to do the inverse because the default theme in CSS is for 'day').
+if (theme === 'night'){
+    document.documentElement.style.setProperty('--color-dark', night.dark);  
+    document.documentElement.style.setProperty('--color-light', night.light);  
+}
 
 const fragment = document.createDocumentFragment();      //declare variable 
 const extracted = books.slice(0, 36);
