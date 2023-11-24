@@ -28,15 +28,9 @@ const dataListTitle = document.querySelector('[data-list-title]')
 const dataListSubTitle = document.querySelector('[data-list-subtitle]')
 const dataListDescription = document.querySelector('[data-list-description]')
 
-if (!books && !Array.isArray(books)) {
-    throw new Error('Source required') ;
-}
-if (!range && range.length != 2) {
-    throw new Error('Range must be an array with two numbers');
-}                                           //fixed syntax issues and structure
-
-
-
+if (!books && !Array.isArray(books)) throw new Error('Source required') 
+if (!range && range.length != 2) throw new Error('Range must be an array with two numbers')
+                                                //corrected structure
 
 const day = {                                //declare variable
     dark: '10, 10, 20',     
@@ -58,21 +52,54 @@ if (theme === 'night'){
     document.documentElement.style.setProperty('--color-light', night.light);  
 }
 
-const fragment = document.createDocumentFragment();      //declare variable 
-const extracted = books.slice(0, 36);
+//Create the preview fragment for a single book.
+const createPreview = ({author, id, image, title}) =>
+{
+    const previewFragment = document.createDocumentFragment()
 
-for ({ author, image, title, id }; extracted) {            //i++
+    const previewElement = document.createElement('button')
+    previewElement.classList = 'preview'
+    previewElement.setAttribute('data-preview', id)
+
+    previewElement.innerHTML = /* html */ `
+        <img
+            class="preview__image"
+            src="${image}"
+        />
+        
+        <div class="preview__info">
+            <h3 class="preview__title">${title}</h3>
+            <div class="preview__author">${authors[author]}</div>
+        </div>
+    `
+
+    previewFragment.appendChild(previewElement)
+    return(previewFragment)
+}
+
+
+//Create a page of previews.
+//the matches object contains the currently relevant list of books
+//the range array contains 2 elements to identify the range within the matches list to display on the page
+const createPreviewsFragment= (matches, range) =>                   //create function 
+{
+const previewPageFragment = document.createDocumentFragment()     //declare variable 
+extracted = matches.slice(range[0], range[1])
+
+for ({ author, image, title, id }; of extracted) {            //i++ removed
     const preview = createPreview({
         author,
         id,
         image,
         title,
-    });
+    })
 
-    fragment.appendChild(preview);
+    previewPageFragment.appendChild(preview)
 }
+    return previewPageFragment
+} 
 
-data-list-items.appendChild(fragment);
+
 
 const genres = document.createDocumentFragment();
 const element = document.createElement('option');
