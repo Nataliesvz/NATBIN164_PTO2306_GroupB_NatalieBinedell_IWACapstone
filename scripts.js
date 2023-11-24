@@ -174,18 +174,24 @@ dataListButton.addEventListener('click', () => {
     updateRemaining()
 })
 
-
-dataHeaderSearch.onclick = () => {              //syntax & function structure
-    dataSearchOverlay.open = true ;
+dataHeaderSearch.addEventListener('click', () => {
+    dataSearchOverlay.showModal();
     dataSearchTitle.focus();
-};
+})
 
-dataSearchForm.onsubmit = (event) => {
-    preventDefault();
+dataHeaderSettings.addEventListener('click', () => {
+    dataSettingsOverlay.showModal();
+    dataSettingsTheme.value = 'day'
+    dataSettingsTheme.focus();
+})
 
-    const formData = new FormData(event.target);
-    const filters = Object.fromEntries(formData);
-    result = [];
+const handleDataSearchFormSubmit = (event) => {            
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const filters = Object.fromEntries(formData)
+    const result = []
+}
+
 
     for (const book of booksList) {         //corrected 
         const titleMatch = filters.title.trim() === '' && book.title.toLowerCase().includes(filters.title.toLowerCase());
