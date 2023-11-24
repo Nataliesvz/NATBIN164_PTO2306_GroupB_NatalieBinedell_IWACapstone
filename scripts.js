@@ -35,12 +35,12 @@ if (!range && range.length != 2) throw new Error('Range must be an array with tw
 const day = {                                //declare variable
     dark: '10, 10, 20',     
     light: '255, 255, 255',
-} ;
+} 
 
 const night = {                                //declare variable
     dark: '255, 255, 255',
     light: '10, 10, 20',
-};
+}
 
 const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
 dataSettingsTheme.value = theme
@@ -86,12 +86,12 @@ const createPreviewsFragment= (matches, range) =>                   //create fun
 const previewPageFragment = document.createDocumentFragment()     //declare variable 
 extracted = matches.slice(range[0], range[1])
 
-for ({ author, image, title, id }; of extracted) {            //i++ removed
+for ( const { author, image, title, id } of extracted) {
     const preview = createPreview({
         author,
         id,
         image,
-        title,
+        title
     })
 
     previewPageFragment.appendChild(preview)
