@@ -166,44 +166,14 @@ dataSearchCancel.addEventListener('click', () => { dataSearchOverlay.close() } )
 dataSettingsCancel.addEventListener('click',  () => { dataSettingsOverlay.close() })
 dataListClose.addEventListener('click', () => { dataListActive.close() })
 
+dataListButton.addEventListener('click', () => {
+    dataListItems.innerHTML = ''
+    range = [page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE]
+    dataListItems.appendChild(createPreviewsFragment(matches, range))
+    page = page + 1
+    updateRemaining()
+})
 
-
-
-
-dataListButton.innerHTML = `Show more (${books.length - BOOKS_PER_PAGE})` ;
-
-dataListButton.disabled= !(matches.length - [page * BOOKS_PER_PAGE] > 0) ;
-
-dataListButton.innerHTML = /* html */ [
-    '<span>Show more</span>',
-    '<span class="list__remaining"> (${matches.length - [page * BOOKS_PER_PAGE] > 0 ? matches.length - [page * BOOKS_PER_PAGE] : 0})</span>',
-]
-
-dataSearchCancel.onclick = () => {              //fixed syntax & created function and corrected structure
-    data-search-overlay.open = false ;
-};
-
-dataSettingsCancel.onclick = () => { 
-    querySelect(data-settings-overlay).open =false;
- };
- 
-dataSettingsForm.submit = () => {
-     actions.settings.submit();
-};
-
-dataListClose.onclick = ()=>  { 
-    dataListActive.open = false; 
-};
-
-DdataListButton.onclick = () => {
-    document.querySelector([data-list-items]).appendChild(
-        createPreviewsFragment(matches, page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)
-    );
-
-    actions.list.updateRemaining();
-
-    page = page + 1;
-};
 
 dataHeaderSearch.onclick = () => {              //syntax & function structure
     dataSearchOverlay.open = true ;
