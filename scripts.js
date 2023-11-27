@@ -28,8 +28,8 @@ const dataListTitle = document.querySelector('[data-list-title]')
 const dataListSubTitle = document.querySelector('[data-list-subtitle]')
 const dataListDescription = document.querySelector('[data-list-description]')
 
-if (!books && !Array.isArray(books)) throw new Error('Source required') 
-if (!range && range.length != 2) throw new Error('Range must be an array with two numbers')
+if (!books ||!Array.isArray(books)) throw new Error('Source required') 
+if (!range || range.length != 2) throw new Error('Range must be an array with two numbers')
                                                 //corrected structure
 
 const day = {                                //declare variable
