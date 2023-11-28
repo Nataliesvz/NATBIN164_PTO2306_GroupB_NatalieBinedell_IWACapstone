@@ -1,10 +1,12 @@
-import { BOOKS_PER_PAGE, authors, genres, books } from './data.js'
+import { BOOKS_PER_PAGE, authors, genres, books } from './data.js' //import the relevant objects from the data file
 
-let matches = books
-let extracted = books
-let page = 0
-let range = [0,0]
+let matches = books //contains the currently relevant list of books to display
+let extracted = books  //will contain the current page of books to display
+let page = 0  //the current page number
+let range = [0,0]  //used when extracting the list of books to display on any given page. See function "createPreviewsFragment"
 
+
+//assign reusable references to document elements
 const dataListButton = document.querySelector('[data-list-button]')
 const dataSearchCancel = document.querySelector('[data-search-cancel]')
 const dataSearchOverlay = document.querySelector('[data-search-overlay]')
@@ -28,20 +30,23 @@ const dataListTitle = document.querySelector('[data-list-title]')
 const dataListSubTitle = document.querySelector('[data-list-subtitle]')
 const dataListDescription = document.querySelector('[data-list-description]')
 
-if (!books ||!Array.isArray(books)) throw new Error('Source required') 
-if (!range || range.length != 2) throw new Error('Range must be an array with two numbers')
-                                                //corrected structure
+//initial variable validation
+if (!books && !Array.isArray(books)) throw new Error('Source required') 
+if (!range && range.length != 2) throw new Error('Range must be an array with two numbers')        //corrected structure
+                                             
 
-const day = {                                //declare variable
+//variables to contain colour schemes for the dark vs light theme (inverse of each other)
+const day = {                              
     dark: '10, 10, 20',     
     light: '255, 255, 255',
 } 
 
-const night = {                                //declare variable
+const night = {                                
     dark: '255, 255, 255',
     light: '10, 10, 20',
 }
 
+//switch to the dark theme if the client media device supports theming, and the dark theme is selected
 const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
 dataSettingsTheme.value = theme
 
@@ -86,7 +91,14 @@ const createPreviewsFragment= (matches, range) =>                   //create fun
 const previewPageFragment = document.createDocumentFragment()     //declare variable 
 extracted = matches.slice(range[0], range[1])
 
-for ( const { author, image, title, id } of extracted) {
+
+//Can destructure like:
+// for ( const singleBook of extracted) {
+//     const preview = createPreview(singleBook)
+
+
+
+for ( const { author, image, title, id } of extracted) {             
         const preview = createPreview({
             author,
             id,
